@@ -1,4 +1,4 @@
-# Osan 0 tehtävät
+# Osan 0 tehtävävien vastaukset
 ## 0.4
 [uusimuistiinpano](https://github.com/akirataguchi115/fsrepo/blob/master/osa0/uusimuistiinpano.png)
 ## 0.5
