@@ -8,10 +8,26 @@ const Button = ({ value, text }) => (
 )
 
 const StatisticsLine = ({ value, text }) => {
+  if (text === 'positive') {
+    return (
+      <React.Fragment>
+        <td>
+          {text}
+        </td>
+        <td>
+          {value} %
+        </td>
+      </React.Fragment>)
+  }
   return (
-    <div>
-      {text} {value}
-    </div>
+    <React.Fragment>
+      <td>
+        {text}
+      </td>
+      <td>
+        {value}
+      </td>
+    </React.Fragment>
   )
 }
 
@@ -50,12 +66,28 @@ const App = () => {
       <Button text="neutral" value={handleNeutralClick} />
       <Button text="bad" value={handleBadClick} />
       <h2>statistics</h2>
-      <StatisticsLine text="good" value={good} />
-      <StatisticsLine text="neutral" value={neutral} />
-      <StatisticsLine text="bad" value={bad} />
-      <StatisticsLine text="all" value={good + neutral + bad} />
-      <StatisticsLine text="average" value={(good * 1 + bad * -1) / (good + neutral + bad)} />
-      <StatisticsLine text="positive" value={good / (good + neutral + bad)} />
+      <table>
+        <tbody>
+          <tr>
+            <StatisticsLine text="good" value={good} />
+          </tr>
+          <tr>
+            <StatisticsLine text="neutral" value={neutral} />
+          </tr>
+          <tr>
+            <StatisticsLine text="bad" value={bad} />
+          </tr>
+          <tr>
+            <StatisticsLine text="all" value={good + neutral + bad} />
+          </tr>
+          <tr>
+            <StatisticsLine text="average" value={(good * 1 + bad * -1) / (good + neutral + bad)} />
+          </tr>
+          <tr>
+            <StatisticsLine text="positive" value={good / (good + neutral + bad)*100} />
+          </tr>
+        </tbody>
+      </table>
     </div>
 
   )
