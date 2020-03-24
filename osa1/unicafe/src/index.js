@@ -1,6 +1,36 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Statistics = (props) => {
+
+  const handleGoodClick = () => {
+    props.setGood(props.good + 1)
+  }
+
+  const handleNeutralClick = () => {
+    props.setNeutral(props.neutral + 1)
+  }
+
+  const handleBadClick = () => {
+    props.setBad(props.bad + 1)
+  }
+  return (
+    <div>
+      <h2>give feedback</h2>
+      <Button onClick={handleGoodClick} text='good' />
+      <Button onClick={handleNeutralClick} text='neutral' />
+      <Button onClick={handleBadClick} text='bad' />
+      <h2>statistics</h2>
+      <div>good {props.good}</div>
+      <div>neutral {props.neutral}</div>
+      <div>bad {props.bad}</div>
+      <div>all {props.good + props.neutral + props.bad}</div>
+      <div>average {(props.good * 1 + props.bad * -1) / (props.good + props.neutral + props.bad)}</div>
+      <div>positive {props.good / (props.good + props.neutral + props.bad)} %</div>
+    </div>
+  )
+}
+
 const Button = ({ onClick, text }) => (
   <button onClick={onClick}>
     {text}
@@ -13,32 +43,10 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const handleGoodClick = () => {
-    setGood(good + 1)
-  }
-
-  const handleNeutralClick = () => {
-    setNeutral(neutral + 1)
-  }
-
-  const handleBadClick = () => {
-    setBad(bad + 1)
-  }
-
   return (
 
     <div>
-      <h2>give feedback</h2>
-      <Button onClick={handleGoodClick} text='good' />
-      <Button onClick={handleNeutralClick} text='neutral' />
-      <Button onClick={handleBadClick} text='bad' />
-      <h2>statistics</h2>
-      <div>good {good}</div>
-      <div>neutral {neutral}</div>
-      <div>bad {bad}</div>
-      <div>all {good + neutral + bad}</div>
-      <div>average {(good * 1 + bad * -1) / (good + neutral + bad)}</div>
-      <div>positive {good / (good + neutral + bad)} %</div>
+      <Statistics good={good} neutral={neutral} bad={bad} setGood={setGood} setNeutral={setNeutral} setBad={setBad} />
     </div>
 
   )
