@@ -7,12 +7,21 @@ const Button = ({ value, text }) => (
 )
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [array, setArray] = useState(Array.apply(null, new Array(10)).map(Number.prototype.valueOf, 0))
   const handleNext = () => {
     setSelected(Math.floor(Math.random() * 6))
   }
+  const handleVote = () => {
+    const copy = { ...array }
+    copy[selected] += 1
+    setArray(copy)
+  }
+
   return (
     <div>
       <div>{props.anecdotes[selected]}</div>
+      <div>has {array[selected]} votes</div>
+      <Button text="vote" value={handleVote} />
       <Button text="next anecdote" value={handleNext} />
     </div>
   )
