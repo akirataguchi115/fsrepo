@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+
 const Button = ({ value, text }) => (
   <button onClick={value}>
     {text}
@@ -7,22 +8,39 @@ const Button = ({ value, text }) => (
 )
 const App = (props) => {
   const [selected, setSelected] = useState(0)
-  const [array, setArray] = useState(Array.apply(null, new Array(10)).map(Number.prototype.valueOf, 0))
-  const handleNext = () => {
-    setSelected(Math.floor(Math.random() * 6))
-  }
+  const [array, setArray] = useState(Array.apply(null, new Array(6)).map(Number.prototype.valueOf, 0))
+  const [max, setMax] = useState(0)
+
   const handleVote = () => {
     const copy = { ...array }
     copy[selected] += 1
     setArray(copy)
+
+    var mox = array[0];
+    var maxIndex = 0;
+    for (var i = 0; i < 6; i++) {
+      if (copy[i] > mox) {
+        maxIndex = i;
+        mox = copy[i];
+      }
+    }
+    setMax(maxIndex)
+  }
+
+  const handleNext = () => {
+    setSelected(Math.floor(Math.random() * 6))
   }
 
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       <div>{props.anecdotes[selected]}</div>
       <div>has {array[selected]} votes</div>
       <Button text="vote" value={handleVote} />
       <Button text="next anecdote" value={handleNext} />
+      <h2>Anecdote with most votes</h2>
+      <div>{anecdotes[max]}</div>
+      <div>has {array[max]} votes</div>
     </div>
   )
 }
