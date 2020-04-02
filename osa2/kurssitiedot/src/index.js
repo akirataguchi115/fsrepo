@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 const Total = (props) => {
     return (
-        <p>Number of exercises {props.parts.parts[0].exercises + props.parts.parts[1].exercises + props.parts.parts[2].exercises}</p>
+        <b>total of {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} exercises</b>
     )
 }
 
@@ -32,6 +32,7 @@ const Course = (props) => {
         <div>
             <Header course={props.course} />
             <Content parts={props.course.parts} />
+            <Total parts={props.course.parts} />
         </div>
     )
 }
