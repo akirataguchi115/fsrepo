@@ -2,8 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const Total = (props) => {
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    const total = props.parts.map(x => x.exercises).reduce(reducer)
     return (
-        <b>total of {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} exercises</b>
+        <b>total of {total} exercises</b>
     )
 }
 
@@ -16,7 +18,7 @@ const Part = (props) => {
 const Content = (props) => {
     return (
         <div>
-            {props.parts.map(part => <Part name={part.name} ex={part.exercises} />)}
+            {props.parts.map(part => <Part key={part.id} name={part.name} ex={part.exercises} />)}
         </div>
     )
 }
