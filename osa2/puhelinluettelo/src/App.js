@@ -13,7 +13,9 @@ const App = () => {
             date: new Date().toISOString,
             id: persons.length + 1,
         }
-        setPersons(persons.concat(NameObject))
+        persons.map(x => x.name).includes(newName) ?
+            window.alert(`${newName} is already added to phonebook`) :
+            setPersons(persons.concat(NameObject))
         setNewName('')
     }
 
@@ -27,7 +29,7 @@ const App = () => {
                 <div>
                     name: <input
                         value={newName}
-                        onChange={handleNameChange}/>
+                        onChange={handleNameChange} />
                 </div>
                 <div>
                     <button type="submit">add</button>
