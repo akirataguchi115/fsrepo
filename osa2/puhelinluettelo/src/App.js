@@ -40,7 +40,7 @@ const App = () => {
 
     const namesToShow = persons.filter(person => person.name
         .toLowerCase()
-        .includes(newFilter))
+        .includes(newFilter.toLowerCase()))
 
     return (
         <div>
@@ -52,7 +52,7 @@ const App = () => {
                         onChange={handleFilterChange} />
                 </div>
             </form>
-            <h2>add a new</h2>
+            <h3>add a new</h3>
             <form onSubmit={addName}>
                 <div>
                     name: <input
@@ -68,7 +68,7 @@ const App = () => {
                     <button type="submit">add</button>
                 </div>
             </form>
-            <h2>Numbers</h2>
+            <h3>Numbers</h3>
             <div>
                 {namesToShow.map((person, i) =>
                     <p key={person.name}>{person.name} {person.number}</p>
