@@ -25,14 +25,25 @@ const Countries = (props) => {
                         <li key={language.name}>{language.name}</li>
                     )}
                 </ul>
-                <img src={result.flag} alt="flag of the country" width="500" height="300"/>
+                <img src={result.flag} alt="flag of the country" width="500" height="300" />
             </>
         )
     } else if (props.countriesToShow.length < 10) {
         return (
-            <>
-                {props.countriesToShow.map((country, i) => <p key={country.name}>{country.name}</p>)}
-            </>
+            <table>
+                {props.countriesToShow.map((country, i) =>
+                    <tr>
+                        <td>
+                            <p key={country.name}>{country.name}</p>
+                        </td>
+                        <td>
+                            <form onSubmit={() => props.setNewFilter(country.name)}>
+                                <button type="submit">show</button>
+                            </form>
+                        </td>
+                    </tr>
+                )}
+            </table>
         )
     } else {
         return (
@@ -46,10 +57,10 @@ const App = () => {
         axios
             .get('https://restcountries.eu/rest/v2/all')
             .then(response => {
-                setcountries(response.data)
+                setCountries(response.data)
             })
     }, [])
-    const [countries, setcountries] = useState([])
+    const [countries, setCountries] = useState([])
     const [newFilter, setNewFilter] = useState('')
 
     const handleFilterChange = (event) => {
@@ -64,7 +75,7 @@ const App = () => {
         <div>
             <Filter newFilter={newFilter}
                 handleFilterChange={handleFilterChange} />
-            <Countries countriesToShow={countriesToShow} />
+            <Countries countriesToShow={countriesToShow} setNewFilter={setNewFilter} />
         </div>
     )
 }
