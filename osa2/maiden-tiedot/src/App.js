@@ -12,36 +12,54 @@ const Filter = (props) => {
 }
 
 const Countries = (props) => {
-    if (props.countriesToShow.length === 1) {
+    const [weather, setWeather] = useState('')
+    useEffect(() => {
+        const api_key = process.env.REACT_APP_API_KEY
+        if (props.countriesToShow[0] !== undefined) {
+            axios
+                .get('http://api.weatherstack.com/current?access_key=' + api_key + '&query=' + props.countriesToShow[0].capital)
+                .then(response => {
+                    setWeather(response.data)
+                })
+        }
+    }, [props.countriesToShow])
+    if (props.countriesToShow.length === 1 && weather.current !== undefined) {
+
         const result = props.countriesToShow[0]
         return (
             <>
                 <h1>{result.name}</h1>
                 <p>Capital {result.capital}</p>
                 <p>population {result.population}</p>
-                <h2>languages</h2>
+                <h2>Spoken languages</h2>
                 <ul>
                     {result.languages.map((language, i) =>
                         <li key={language.name}>{language.name}</li>
                     )}
                 </ul>
                 <img src={result.flag} alt="flag of the country" width="500" height="300" />
+                <h2>Weather in {result.capital}</h2>
+                <h3>temperature: {weather.current.temperature} Celcius</h3>
+                <img src={weather.current.weather_icons[0]} alt="weather_icon"/>
+                    <h3>wind: {weather.current.wind_speed} km/h direction {weather.current.wind_dir}</h3>
             </>
         )
     } else if (props.countriesToShow.length < 10) {
         return (
             <table>
                 {props.countriesToShow.map((country, i) =>
-                    <tr>
-                        <td>
-                            <p key={country.name}>{country.name}</p>
-                        </td>
-                        <td>
-                            <form onSubmit={() => props.setNewFilter(country.name)}>
-                                <button type="submit">show</button>
-                            </form>
-                        </td>
-                    </tr>
+                    <tbody key={country.name}>
+                        <tr>
+                            <td>
+                                <p key={country.name}>{country.name}</p>
+                            </td>
+                            <td>
+                                <form onSubmit={() => props.setNewFilter(country.name)}>
+                                    <button type="submit">show</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
                 )}
             </table>
         )
