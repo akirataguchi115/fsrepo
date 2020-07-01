@@ -73,8 +73,13 @@ const App = () => {
         persons.map(x => x.name).includes(newName) ?
             window.alert(`${newName} is already added to phonebook`)
             : setPersons(persons.concat(NameObject))
-        setNewName('')
-        setNewNumber('')
+        axios
+            .post('http://localhost:3001/persons', NameObject)
+            .then(response => {
+                setPersons(persons.concat(response.data))
+                setNewName('')
+                setNewNumber('')
+            })
     }
 
     const handleNameChange = (event) => {
