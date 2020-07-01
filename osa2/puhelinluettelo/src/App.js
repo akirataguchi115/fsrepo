@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const PersonForm = (props) => {
     return (
@@ -51,10 +51,13 @@ const Persons = (props) => {
 
 const App = () => {
     useEffect(() => {
-        axios
-            .get('http://localhost:3001/persons')
+        personService
+            .getAll()
             .then(response => {
-                setPersons(response.data)
+                setPersons(response)
+            })
+            .catch(error => {
+                console.log('fail')
             })
     }, [])
     const [persons, setPersons] = useState([])
@@ -73,10 +76,10 @@ const App = () => {
         persons.map(x => x.name).includes(newName) ?
             window.alert(`${newName} is already added to phonebook`)
             : setPersons(persons.concat(NameObject))
-        axios
-            .post('http://localhost:3001/persons', NameObject)
+        personService
+            .create(NameObject)
             .then(response => {
-                setPersons(persons.concat(response.data))
+                setPersons(persons.concat(response))
                 setNewName('')
                 setNewNumber('')
             })
@@ -111,7 +114,6 @@ const App = () => {
             <Persons namesToShow={namesToShow} />
         </div>
     )
-
 }
 
 export default App

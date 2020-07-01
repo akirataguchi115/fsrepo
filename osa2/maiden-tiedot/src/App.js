@@ -40,8 +40,8 @@ const Countries = (props) => {
                 <img src={result.flag} alt="flag of the country" width="500" height="300" />
                 <h2>Weather in {result.capital}</h2>
                 <h3>temperature: {weather.current.temperature} Celcius</h3>
-                <img src={weather.current.weather_icons[0]} alt="weather_icon"/>
-                    <h3>wind: {weather.current.wind_speed} km/h direction {weather.current.wind_dir}</h3>
+                <img src={weather.current.weather_icons[0]} alt="weather_icon" />
+                <h3>wind: {weather.current.wind_speed} km/h direction {weather.current.wind_dir}</h3>
             </>
         )
     } else if (props.countriesToShow.length < 10) {
