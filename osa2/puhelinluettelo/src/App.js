@@ -67,7 +67,7 @@ const Notification = ({ message }) => {
     }
 
     return (
-        <div className="error">
+        <div className={message.includes("Information") ? 'error' : 'info'}>
             {message}
         </div>
     )
@@ -88,7 +88,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
 
     const addName = (event) => {
         event.preventDefault()
@@ -113,7 +113,10 @@ const App = () => {
                         setNewNumber('')
                     })
                     .catch(error => {
-                        alert(`Person ${person.id} was already deleted from server`)
+                        setErrorMessage(`Information of ${newName} has already been removed from server`)
+                        setTimeout(() => {
+                            setErrorMessage(null)
+                        }, 5000)
                     })
             }
         } else {
