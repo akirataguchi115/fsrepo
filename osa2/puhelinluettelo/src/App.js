@@ -42,7 +42,18 @@ const Persons = (props) => {
         <>
             <div>
                 {props.namesToShow.map((person, i) =>
-                    <p key={person.name}>{person.name} {person.number}</p>
+                    <table key={person.id}>
+                        <tbody >
+                            <tr>
+                                <td>
+                                    <p key={person.name}>{person.name} {person.number}</p>
+                                </td>
+                                <td>
+                                    <button onClick={event => props.removeName(event, person.id, person.name)}>delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 )}
             </div>
         </>
@@ -55,12 +66,9 @@ const App = () => {
             .getAll()
             .then(response => {
                 setPersons(response)
-<<<<<<< HEAD
             })
             .catch(error => {
                 console.log('fail')
-=======
->>>>>>> ac816b68074be80baf1ca1cda846abf931b6df14
             })
     }, [])
     const [persons, setPersons] = useState([])
@@ -86,6 +94,17 @@ const App = () => {
                 setNewName('')
                 setNewNumber('')
             })
+    }
+
+    const removeName = (event, id, name) => {
+        event.preventDefault()
+        if (window.confirm(`Delete ${name}?`)) {
+            personService
+                .remove(id)
+                .then(response => {
+                    setPersons(persons.filter((item => item.id !== id)))
+                })
+        }
     }
 
     const handleNameChange = (event) => {
@@ -114,7 +133,7 @@ const App = () => {
                 handleNameChange={handleNameChange} newNumber={newNumber}
                 handleNumberChange={handleNumberChange} />
             <h3>Numbers</h3>
-            <Persons namesToShow={namesToShow} />
+            <Persons namesToShow={namesToShow} removeName={removeName} />
         </div>
     )
 }
