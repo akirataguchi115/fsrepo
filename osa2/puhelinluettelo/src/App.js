@@ -55,9 +55,12 @@ const App = () => {
             .getAll()
             .then(response => {
                 setPersons(response)
+<<<<<<< HEAD
             })
             .catch(error => {
                 console.log('fail')
+=======
+>>>>>>> ac816b68074be80baf1ca1cda846abf931b6df14
             })
     }, [])
     const [persons, setPersons] = useState([])
