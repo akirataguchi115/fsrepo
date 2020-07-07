@@ -84,16 +84,28 @@ const App = () => {
             date: new Date().toISOString,
             id: persons.length + 1,
         }
-        persons.map(x => x.name).includes(newName) ?
-            window.alert(`${newName} is already added to phonebook`)
-            : setPersons(persons.concat(NameObject))
-        personService
-            .create(NameObject)
-            .then(response => {
-                setPersons(persons.concat(response))
-                setNewName('')
-                setNewNumber('')
-            })
+        if (persons.map(x => x.name).includes(newName)) {
+            if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
+                const person = persons.find(p => p.name === newName)
+                const changedPerson = { ...person, number: newNumber}
+                personService
+                    .update(person.id, changedPerson).then(returnedPerson => {
+                        setPersons(persons.map(p => p.id !== person.id ? p : changedPerson))
+                    })
+                    .catch(error => {
+                        alert(`Person ${person.id} was already deleted from server`)
+                    })
+            }
+        } else {
+            setPersons(persons.concat(NameObject))
+            personService
+                .create(NameObject)
+                .then(response => {
+                    setPersons(persons.concat(response))
+                    setNewName('')
+                    setNewNumber('')
+                })
+        }
     }
 
     const removeName = (event, id, name) => {
