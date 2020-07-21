@@ -67,7 +67,7 @@ const Notification = ({ message }) => {
     }
 
     return (
-        <div className={message.includes("Information") ? 'error' : 'info'}>
+        <div className={message.includes("Information") ? 'info' : 'error'}>
             {message}
         </div>
     )
@@ -105,7 +105,7 @@ const App = () => {
                 personService
                     .update(person.id, changedPerson).then(returnedPerson => {
                         setPersons(persons.map(p => p.id !== person.id ? p : changedPerson))
-                        setErrorMessage(`Updated ${newName}`)
+                        setErrorMessage(`Information: Updated ${newName}`)
                         setTimeout(() => {
                             setErrorMessage(null)
                         }, 5000)
@@ -120,18 +120,20 @@ const App = () => {
                     })
             }
         } else {
-            setPersons(persons.concat(NameObject))
             personService
                 .create(NameObject)
                 .then(response => {
                     setPersons(persons.concat(response))
                     setNewName('')
                     setNewNumber('')
+                    setErrorMessage(`Information: Added ${newName}`)
+                    setTimeout(() => {
+                        setErrorMessage(null)
+                    }, 5000)
                 })
-            setErrorMessage(`Added ${newName}`)
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 5000)
+                .catch(error => {
+                    setErrorMessage(error.response.data.error)
+                })
         }
     }
 
@@ -144,7 +146,7 @@ const App = () => {
                     setPersons(persons.filter((item => item.id !== id)))
                 })
         }
-        setErrorMessage(`Deleted ${name}`)
+        setErrorMessage(`Information: Deleted ${name}`)
         setTimeout(() => {
             setErrorMessage(null)
         }, 5000)
