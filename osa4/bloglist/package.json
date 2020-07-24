@@ -18,8 +18,9 @@
     "start": "BROWSER='google-chrome-stable' react-scripts start",
     "dev": "nodemon src/index.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint . --fix",
+    "test": "jest --verbose"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,6 +38,11 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^7.5.0",
+    "jest": "^26.1.0",
     "nodemon": "^2.0.4"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
