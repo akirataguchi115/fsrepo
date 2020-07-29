@@ -53,6 +53,35 @@ test('a specific blog is within the returned blogs', async () => {
   )
 })
 
+test('identifying field is id', async () => {
+  const response = await api.get('/api/blogs')
+  expect(response.body[0].id).toBeDefined()
+})
+
+test('a valid blog can be added ', async () => {
+  const newBlog = {
+    title: 'Nalle Puh',
+    author: 'A. A. Milne',
+    url: 'https://www.adlibris.com/fi/kirja/nalle-puh-maailman-paras-karhu---kirja-jossa-koemme-nalle-puhin-seurassa-seikkailujen-vuoden-puolen-hehtaarin-puistossa-9789510423004',
+    likes: 6
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  const contents = response.body.map(r => r.title)
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1)
+  expect(contents).toContain(
+    'Nalle Puh'
+  )
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
