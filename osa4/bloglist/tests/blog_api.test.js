@@ -60,7 +60,7 @@ test('identifying field is id', async () => {
 
 test('a valid blog can be added ', async () => {
   const newBlog = {
-    title: 'Nalle Puh',
+    title: 'Nalle Puh kerää verorahoja',
     author: 'A. A. Milne',
     url: 'https://www.adlibris.com/fi/kirja/nalle-puh-maailman-paras-karhu---kirja-jossa-koemme-nalle-puhin-seurassa-seikkailujen-vuoden-puolen-hehtaarin-puistossa-9789510423004',
     likes: 6
@@ -78,7 +78,7 @@ test('a valid blog can be added ', async () => {
 
   expect(response.body).toHaveLength(initialBlogs.length + 1)
   expect(contents).toContain(
-    'Nalle Puh'
+    'Nalle Puh kerää verorahoja'
   )
 })
 
