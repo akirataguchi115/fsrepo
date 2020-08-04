@@ -96,6 +96,17 @@ test('null likes becomes 0 likes', async() => {
   expect(contents).toContain(0)
 })
 
+test('undefined title or url ends up in code 400', async() => {
+  const newBlog = {
+    author: 'A. A. Milne',
+    likes: 7
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
