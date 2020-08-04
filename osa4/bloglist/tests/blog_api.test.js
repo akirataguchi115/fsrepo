@@ -82,6 +82,20 @@ test('a valid blog can be added ', async () => {
   )
 })
 
+test('null likes becomes 0 likes', async() => {
+  const newBlog = {
+    title: 'Nalle Puh tappaa Risto Reippaan',
+    author: 'A. A. Milne',
+    url: 'https://mvlehti.net/'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+
+  const contents = await (await api.get('/api/blogs')).body.map(r => r.likes)
+  expect(contents).toContain(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
