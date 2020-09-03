@@ -19,7 +19,9 @@ usersRouter.post('/', async (request, response) => {
     name: body.name
   })
 
-  const savedUser = await user.save()
+  const savedUser = await user.save(function () {
+    response.set(400)
+  })
 
   response.json(savedUser)
 })
