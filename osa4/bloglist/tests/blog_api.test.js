@@ -2,8 +2,11 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
+const bcrypt = require('bcrypt')
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
+let testToken = ''
 
 const initialBlogs = [
   {
@@ -19,15 +22,26 @@ const initialBlogs = [
     likes: 6
   }
 ]
+const initialUser = {
+  username: 'tuomas',
+  password: 'tuomas'
+}
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   let blogObject = new Blog(initialBlogs[0])
   await blogObject.save()
 
   blogObject = new Blog(initialBlogs[1])
   await blogObject.save()
+
+  const passwordHash = await bcrypt.hash('tuomas', 10)
+  const user = new User({ username: 'tuomas', passwordHash })
+
+  await user.save()
+  testToken = (await api.post('/api/login').send(initialUser)).body.token
 })
 
 test('blogs are returned as json', async () => {
@@ -68,6 +82,7 @@ test('a valid blog can be added ', async () => {
 
   await api
     .post('/api/blogs')
+    .set('authorization', 'bearer '+testToken)
     .send(newBlog)
     .expect(200)
     .expect('Content-Type', /application\/json/)
@@ -90,6 +105,7 @@ test('null likes becomes 0 likes', async() => {
   }
   await api
     .post('/api/blogs')
+    .set('authorization', 'bearer '+testToken)
     .send(newBlog)
 
   const contents = await (await api.get('/api/blogs')).body.map(r => r.likes)
@@ -105,6 +121,18 @@ test('undefined title or url ends up in code 400', async() => {
     .post('/api/blogs')
     .send(newBlog)
     .expect(400)
+})
+
+test('tokenless blog post results in code 401', async() => {
+  const newBlog = {
+    title: 'Nalle Puh tappaa Risto Reippaan',
+    author: 'A. A. Milne',
+    url: 'https://mvlehti.net/'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
 })
 
 afterAll(() => {
