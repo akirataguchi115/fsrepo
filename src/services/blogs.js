@@ -6,4 +6,8 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const blogsExport = {
+  getAll
+}
+
+export default blogsExport
