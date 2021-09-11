@@ -8,6 +8,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -20,6 +23,8 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
+      console.log('useeffectin token', user.token)
     }
   }, [])
 
@@ -32,6 +37,8 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
+      console.log('handleloginin user', user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -44,6 +51,44 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     window.location.reload()
   }
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    }
+
+    blogService
+      .create(blogObject)
+      .then(response => {
+        setBlogs(blogs.concat(response))
+        setNewTitle('')
+        setNewAuthor('')
+        setNewUrl('')
+      })
+      .catch(error => {
+        console.log(error.response.data.error)
+      })
+  }
+
+  const handleTitleChange = (event) => {
+    console.log(event.target.value)
+    setNewTitle(event.target.value)
+  }
+
+  const handleAuthorChange = (event) => {
+    console.log(event.target.value)
+    setNewAuthor(event.target.value)
+  }
+
+
+  const handleUrlChange = (event) => {
+    console.log(event.target.value)
+    setNewUrl(event.target.value)
+  }
+
 
   if (user === null) {
     return (
@@ -78,12 +123,35 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <div>
-        <p>{user.name} logged in</p>
-        <button
+        {user.name} logged in<button
           onClick={logout}>
           logout
         </button>
       </div>
+      <h2>create new</h2>
+      <form onSubmit={addBlog}>
+        <div>
+          title:<input
+            value={newTitle}
+            onChange={handleTitleChange}
+          />
+        </div>
+        <div>
+          author:<input
+            value={newAuthor}
+            onChange={handleAuthorChange}
+          />
+        </div>
+        <div>
+          url:<input
+            value={newUrl}
+            onChange={handleUrlChange}
+          />
+        </div>
+        <div>
+          <button type="submit">create</button>
+        </div>
+      </form>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
