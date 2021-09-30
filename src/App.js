@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 
 const App = () => {
-  const [blogformVisible, setBlogformVisible] = useState(false)
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
@@ -61,21 +58,11 @@ const App = () => {
     window.location.reload()
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    }
-
+  const addBlog = (blogObject) => {
     blogService
       .create(blogObject)
       .then(response => {
         setBlogs(blogs.concat(response))
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
         setErrorMessage(
           `a new blog ${blogObject.title} by ${blogObject.author} added`
         )
@@ -88,47 +75,11 @@ const App = () => {
       })
   }
 
-  const handleTitleChange = (event) => {
-    console.log(event.target.value)
-    setNewTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    console.log(event.target.value)
-    setNewAuthor(event.target.value)
-  }
-
-
-  const handleUrlChange = (event) => {
-    console.log(event.target.value)
-    setNewUrl(event.target.value)
-  }
-
-  const blogForm = () => {
-    const hideWhenVisible = { display: blogformVisible ? 'none' : '' }
-    const showWhenVisible = { display: blogformVisible ? '' : 'none' }
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setBlogformVisible(true)}>create new blog</button>
-        </div>
-        <div style={showWhenVisible}>
-          <BlogForm
-            newTitle={newTitle}
-            newAuthor={newAuthor}
-            newUrl={newUrl}
-            handleTitleChange={handleTitleChange}
-            handleAuthorChange={handleAuthorChange}
-            handleUrlChange={handleUrlChange}
-            addBlog={addBlog}
-          />
-          <button onClick={() => setBlogformVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
-
+  const blogForm = () => (
+    <Togglable buttonLabel="create new blog">
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
+  )
 
   if (user === null) {
     return (
