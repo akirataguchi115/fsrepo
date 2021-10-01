@@ -17,27 +17,27 @@ const Blog = (props) => {
     setVisible(!visible)
   }
 
-  return (
-    <div style={blogStyle}>
+return (
+  <div style={blogStyle}>
+    <div>
+      {props.blog.title}
+      <button style={hideWhenVisible} onClick={toggleVisibility}>view</button>
+      <button style={showWhenVisible} onClick={toggleVisibility}>hide</button>
+    </div>
+    <div style={showWhenVisible}>
       <div>
-        {props.blog.title}
-        <button style={hideWhenVisible} onClick={toggleVisibility}>view</button>
-        <button style={showWhenVisible} onClick={toggleVisibility}>hide</button>
+        {props.blog.url}
       </div>
-      <div style={showWhenVisible}>
-        <div>
-          {props.blog.url}
-        </div>
-        <div>
-          likes {props.blog.likes}
-          <button>like</button>
-        </div>
-        <div>
-          {props.blog.author}
-        </div>
+      <div>
+        likes {props.blog.likes}
+        <button onClick={props.likeBlog}>like</button>
+      </div>
+      <div>
+        {props.blog.author}
       </div>
     </div>
-  )
+  </div>
+)
 }
 
 export default Blog

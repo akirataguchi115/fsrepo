@@ -74,6 +74,19 @@ const App = () => {
       })
   }
 
+
+  const likeBlog = (id, blogObject) => {
+    const changedBlog = { ...blogObject, likes: blogObject.likes + 1, user: blogObject.user.id}
+    blogService
+      .update(id, changedBlog)
+      .then(response => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : response))
+      })
+      .catch(error => {
+        console.log(error.response.data.error)
+      })
+  }
+
   const blogForm = () => (
     <Togglable buttonLabel="create new blog">
       <BlogForm createBlog={addBlog} />
@@ -122,7 +135,7 @@ const App = () => {
       </div>
       {blogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
+        <Blog key={blog.id} blog={blog} likeBlog={() => likeBlog(blog.id, blog)}/>
       )}
     </div>
   )
