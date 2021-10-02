@@ -12,8 +12,10 @@ const Blog = (props) => {
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
+  const showWhenCreator = { display: props.user.username === props.blog.user.username ? '' : 'none' }
 
   const toggleVisibility = () => {
+    console.log(props.user.username,' ja ', props.blog.user.username)
     setVisible(!visible)
   }
 
@@ -34,6 +36,12 @@ return (
       </div>
       <div>
         {props.blog.author}
+      </div>
+      <div>
+        {props.blog.user.name}
+      </div>
+      <div>
+        <button style={showWhenCreator} onClick={props.removeBlog}>remove</button>
       </div>
     </div>
   </div>
