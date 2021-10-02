@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Proptypes from 'prop-types'
 
 const Blog = (props) => {
   const blogStyle = {
@@ -15,7 +16,6 @@ const Blog = (props) => {
   const showWhenCreator = { display: props.user.username === props.blog.user.username ? '' : 'none' }
 
   const toggleVisibility = () => {
-    console.log(props.user.username,' ja ', props.blog.user.username)
     setVisible(!visible)
   }
 
@@ -46,6 +46,11 @@ return (
     </div>
   </div>
 )
+}
+
+Blog.propTypes = {
+  blog: Proptypes.object.isRequired,
+  user: Proptypes.object.isRequired
 }
 
 export default Blog
