@@ -30,9 +30,9 @@ const BlogForm = ({ createBlog }) => {
       url: newUrl
     }
     createBlog(blogObject)
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
   }
 
   return (

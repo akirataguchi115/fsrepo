@@ -76,7 +76,7 @@ const App = () => {
 
 
   const likeBlog = (id, blogObject) => {
-    const changedBlog = { ...blogObject, likes: blogObject.likes + 1, user: blogObject.user.id}
+    const changedBlog = { ...blogObject, likes: blogObject.likes + 1, user: blogObject.user.id }
     blogService
       .update(id, changedBlog)
       .then(response => {
@@ -90,10 +90,10 @@ const App = () => {
   const removeBlog = (id, blogObject) => {
     if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
       blogService
-      .remove(id)
-      .then(response => {
-        setBlogs(blogs.filter((item => item.id !== id)))
-      })
+        .remove(id)
+        .then(() => {
+          setBlogs(blogs.filter((item => item.id !== id)))
+        })
     }
   }
 

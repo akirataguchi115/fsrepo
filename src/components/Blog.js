@@ -19,33 +19,33 @@ const Blog = (props) => {
     setVisible(!visible)
   }
 
-return (
-  <div style={blogStyle}>
-    <div>
-      {props.blog.title}
-      <button style={hideWhenVisible} onClick={toggleVisibility}>view</button>
-      <button style={showWhenVisible} onClick={toggleVisibility}>hide</button>
-    </div>
-    <div style={showWhenVisible}>
+  return (
+    <div style={blogStyle}>
       <div>
-        {props.blog.url}
+        {props.blog.title}
+        <button style={hideWhenVisible} onClick={toggleVisibility}>view</button>
+        <button style={showWhenVisible} onClick={toggleVisibility}>hide</button>
       </div>
-      <div>
+      <div style={showWhenVisible}>
+        <div>
+          {props.blog.url}
+        </div>
+        <div>
         likes {props.blog.likes}
-        <button onClick={props.likeBlog}>like</button>
-      </div>
-      <div>
-        {props.blog.author}
-      </div>
-      <div>
-        {props.blog.user.name}
-      </div>
-      <div>
-        <button style={showWhenCreator} onClick={props.removeBlog}>remove</button>
+          <button onClick={props.likeBlog}>like</button>
+        </div>
+        <div>
+          {props.blog.author}
+        </div>
+        <div>
+          {props.blog.user.name}
+        </div>
+        <div>
+          <button style={showWhenCreator} onClick={props.removeBlog}>remove</button>
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
 }
 
 Blog.propTypes = {
