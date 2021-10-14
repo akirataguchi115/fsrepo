@@ -33,9 +33,6 @@ describe('<Blog />', () => {
     expect(component.container).toHaveTextContent(
       'A. A. Milne'
     )
-    // expect(component.container).not.toHaveTextContent(
-    //   'https://fi.wikipedia.org/wiki/A._A._Milne'
-    // )
   })
 
   test('at start url and likes are not displayed', () => {
@@ -69,5 +66,35 @@ describe('<Blog />', () => {
     fireEvent.submit(form)
 
     expect(createBlog.mock.calls).toHaveLength(2)
+  })
+
+  test('<BlogForm /> updates parent state', () => {
+    const createBlog = jest.fn()
+
+    const component = render(
+      <BlogForm createBlog={createBlog} />
+    )
+
+    const title = component.container.querySelector('#title')
+    const url = component.container.querySelector('#url')
+    const author = component.container.querySelector('#author')
+    const form = component.container.querySelector('form')
+    fireEvent.change(title, {
+      target: { value: 'Nalle Bruh' }
+    })
+    fireEvent.change(url, {
+      target: { value: 'https://fi.wikipedia.org/wiki/Nalle_Puh' }
+    })
+    fireEvent.change(author, {
+      target: { value: 'A. A. Milne'}
+    })
+    fireEvent.submit(form)
+    fireEvent.submit(form)
+
+    expect(createBlog.mock.calls[0][0].title).toBe('Nalle Bruh')
+    expect(createBlog.mock.calls[0][0].author).toBe('A. A. Milne')
+    expect(createBlog.mock.calls[0][0].url).toBe('https://fi.wikipedia.org/wiki/Nalle_Puh')
+
+    expect(createBlog.mock.calls[0][0].author).not.toBe('A. A. Akira')
   })
 })
