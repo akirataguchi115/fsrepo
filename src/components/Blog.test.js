@@ -86,7 +86,7 @@ describe('<Blog />', () => {
       target: { value: 'https://fi.wikipedia.org/wiki/Nalle_Puh' }
     })
     fireEvent.change(author, {
-      target: { value: 'A. A. Milne'}
+      target: { value: 'A. A. Milne' }
     })
     fireEvent.submit(form)
     fireEvent.submit(form)
