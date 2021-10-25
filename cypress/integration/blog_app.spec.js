@@ -7,6 +7,13 @@ describe('Blog app', function() {
       password: 'salainen'
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
+
+    const user2 = {
+      name: 'Akira Taguchi',
+      username: 'akirataguchi115',
+      password: 'einiinsalainen'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/', user2)
     cy.visit('http://localhost:3000')
   })
 
@@ -38,8 +45,6 @@ describe('Blog app', function() {
       cy.get('#username').type('mluukkai')
       cy.get('#password').type('salainen')
       cy.get('#login-button').click()
-      // log in user here
-      cy.get('#login-button').click()
     })
 
     it('A blog can be created', function() {
@@ -50,6 +55,19 @@ describe('Blog app', function() {
       cy.get('#url').type('https://yle.fi')
       cy.get('#create-button').click()
       cy.contains('a note created by cypress')
+    })
+
+    it('A blog can be liked', function() {
+      cy.contains('new blog').click()
+      cy.contains('create')
+      cy.get('#title').type('a note created by cypress')
+      cy.get('#author').type('some author')
+      cy.get('#url').type('https://yle.fi')
+      cy.get('#create-button').click()
+      cy.wait(1000)
+      cy.contains('view').click()
+      cy.contains('like').click()
+      cy.contains('likes 1')
     })
   })
 
