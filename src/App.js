@@ -67,7 +67,7 @@ const App = () => {
         )
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000)
+        }, 3000)
       })
       .catch(error => {
         console.log(error.response.data.error)
@@ -146,9 +146,11 @@ const App = () => {
         </button>
       </div>
       {blogForm()}
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={() => likeBlog(blog.id, blog)} removeBlog={() => removeBlog(blog.id, blog)} user={user}/>
-      )}
+      <div id="blogs">
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} likeBlog={() => likeBlog(blog.id, blog)} removeBlog={() => removeBlog(blog.id, blog)} user={user} />
+        )}
+      </div>
     </div>
   )
 }
