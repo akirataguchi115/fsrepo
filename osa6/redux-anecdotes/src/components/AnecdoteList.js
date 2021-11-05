@@ -6,10 +6,12 @@ import { notifyVote, notifyClear } from '../reducers/notificationReducer'
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(({ anecdotes }) => anecdotes)
+  const filter = useSelector(({ filter }) => filter)
 
   return (
     <div>
-      {anecdotes.map(anecdote =>
+      {anecdotes.filter(anecdote =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase())).map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
