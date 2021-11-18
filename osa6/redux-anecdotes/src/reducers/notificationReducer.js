@@ -1,9 +1,9 @@
 const notificationReducer = (state = '', action) => {
   switch (action.type) {
     case 'NOTIFY_VOTE':
-      return action.data.content
+      return 'you voted ' + action.data.content
     case 'NOTIFY_CREATE':
-      return `you created '${action.data.content}'`
+      return 'you created ' + action.data.content
     case 'NOTIFY_CLEAR':
       return ''
     default:
@@ -11,15 +11,30 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-export const setNotification = (content, duration) => {
+export const setNotification = (type, content, duration) => {
   return async dispatch => {
-    dispatch({
-      type: 'NOTIFY_VOTE',
-      data: {
-        content,
-        duration
-      }
-    })
+    switch (type) {
+      case 'vote':
+        dispatch({
+          type: 'NOTIFY_VOTE',
+          data: {
+            content,
+            duration
+          }
+        })
+        break
+      case 'create':
+        dispatch({
+          type: 'NOTIFY_CREATE',
+          data: {
+            content,
+            duration
+          }
+        })
+        break
+      default:
+        return content
+    }
     setTimeout(() => {
       dispatch(notifyClear())
     }, duration * 1000)
