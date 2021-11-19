@@ -35,9 +35,10 @@ export const setNotification = (type, content, duration) => {
       default:
         return content
     }
-    setTimeout(() => {
+    let ass = setTimeout(() => {
       dispatch(notifyClear())
     }, duration * 1000)
+    return ass
   }
 }
 

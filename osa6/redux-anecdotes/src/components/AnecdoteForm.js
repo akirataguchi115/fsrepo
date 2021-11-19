@@ -2,14 +2,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { idSet } from '../reducers/timeoutReducer'
 
 const NewAnecdote = (props) => {
+
   const addAnecdote = async (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     props.createAnecdote(content)
-    props.setNotification('create', content, 10)
+    props.setNotification('create', content, 4).then(result => {
+      clearTimeout(props.timeoutId)
+      props.idSet(result)
+    })
   }
 
   return (
@@ -22,9 +27,16 @@ const NewAnecdote = (props) => {
   )
 }
 
-const mapDispatchtoProps = {
-  createAnecdote,
-  setNotification
+const mapStateToProps = (state) => {
+  return {
+    timeoutId: state.timeoutId
+  }
 }
 
-export default connect(null, mapDispatchtoProps)(NewAnecdote)
+const mapDispatchtoProps = {
+  createAnecdote,
+  setNotification,
+  idSet
+}
+
+export default connect(mapStateToProps, mapDispatchtoProps)(NewAnecdote)
