@@ -5,6 +5,7 @@ import {
   Switch,
   Route,
   Link,
+  Redirect,
   useRouteMatch,
 } from 'react-router-dom'
 
@@ -133,6 +134,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification('a new anecdote ' + anecdote.content + ' created!')
+    setTimeout(() => {
+      setNotification('')
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -159,12 +164,17 @@ const App = () => {
 
       <Router>
         <Menu />
+        <div>
+          {notification ? notification : ''}
+        </div>
         <Switch>
           <Route path="/anecdotes/:id">
             <Anecdote anecdote={anecdote} />
           </Route>
           <Route path="/create">
-            <CreateNew addNew={addNew} />
+            {notification
+            ? <Redirect to="/" />
+            : <CreateNew addNew={addNew} />}
           </Route>
           <Route path="/about">
             <About />
