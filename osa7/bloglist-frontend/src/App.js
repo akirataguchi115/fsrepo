@@ -10,10 +10,9 @@ import storage from './utils/storage'
 
 import { notifyWith } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, createBlog } from './reducers/blogsReducer'
+import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogsReducer'
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([])
   const blogs = useSelector(({ blogs }) => blogs)
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
@@ -58,20 +57,15 @@ const App = () => {
     }
   }
 
-  const handleLike = async (id) => {
-    const blogToLike = blogs.find(b => b.id === id)
-    const likedBlog = { ...blogToLike, likes: blogToLike.likes + 1, user: blogToLike.user.id }
-    await blogService.update(likedBlog)
-    // setBlogs(blogs.map(b => b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b))
+  const handleLike = async (blog) => {
+    dispatch(likeBlog(blog))
   }
 
   const handleRemove = async (id) => {
+    dispatch(removeBlog(id))
     const blogToRemove = blogs.find(b => b.id === id)
     const ok = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)
-    if (ok) {
-      await blogService.remove(id)
-      // setBlogs(blogs.filter(b => b.id !== id))
-    }
+    if (ok) await blogService.remove(id)
   }
 
   const handleLogout = () => {
