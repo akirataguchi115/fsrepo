@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 
-import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
 
 import { notifyWith } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs, createBlog, likeBlog, removeBlog } from './reducers/blogsReducer'
+import { setUser, setUsername, setPassword } from './reducers/userReducer'
 
 const App = () => {
   const blogs = useSelector(({ blogs }) => blogs)
-  const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const user = useSelector(({ user }) => user)
 
   const blogFormRef = React.createRef()
   const dispatch = useDispatch()
@@ -27,21 +25,22 @@ const App = () => {
 
   useEffect(() => {
     const user = storage.loadUser()
-    setUser(user)
+    dispatch(setUser(user))
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
+      const username = user.username
+      const password = user.password
+      const loggedInUser = await loginService.login({
         username, password
       })
-
-      setUsername('')
-      setPassword('')
-      setUser(user)
-      dispatch(notifyWith(`${user.name} welcome back!`, 'success'))
-      storage.saveUser(user)
+      dispatch(setUser(loggedInUser))
+      storage.saveUser(loggedInUser)
+      dispatch(setUsername(''))
+      dispatch(setPassword(''))
+      dispatch(notifyWith(`${loggedInUser.name} welcome back!`, 'success'))
     } catch (exception) {
       dispatch(notifyWith('wrong username/password'))
     }
@@ -62,18 +61,17 @@ const App = () => {
   }
 
   const handleRemove = async (id) => {
-    dispatch(removeBlog(id))
     const blogToRemove = blogs.find(b => b.id === id)
     const ok = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)
-    if (ok) await blogService.remove(id)
+    if (ok) dispatch(removeBlog(id))
   }
 
   const handleLogout = () => {
-    setUser(null)
+    dispatch(setUser(null))
     storage.logoutUser()
   }
 
-  if (!user) {
+  if (!user.user) {
     return (
       <div>
         <h2>login to application</h2>
@@ -85,16 +83,16 @@ const App = () => {
             username
             <input
               id='username'
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
+              value={user.username}
+              onChange={({ target }) => dispatch(setUsername(target.value))}
             />
           </div>
           <div>
             password
             <input
               id='password'
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
+              value={user.password}
+              onChange={({ target }) => dispatch(setPassword(target.value))}
             />
           </div>
           <button id='login'>login</button>
@@ -112,7 +110,7 @@ const App = () => {
       <Notification />
 
       <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
+        {user.user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
 
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
