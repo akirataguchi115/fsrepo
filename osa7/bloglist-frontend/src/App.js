@@ -16,7 +16,10 @@ import { setUser, setUsername, setPassword, setUsers } from './reducers/userRedu
 import {
   Switch,
   Route,
+  Link,
 } from 'react-router-dom'
+import User from './components/User'
+import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min'
 const App = () => {
   const blogs = useSelector(({ blogs }) => blogs)
   const user = useSelector(({ user }) => user)
@@ -40,7 +43,7 @@ const App = () => {
       })
     }
     getUsers()
-  }, [blogs])
+  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -117,6 +120,11 @@ const App = () => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
+  const match = useRouteMatch('/users/:id')
+  const requestedUser = match
+    ? user.users.find(user => user.id === match.params.id)
+    : null
+
   return (
     <div>
       <h2>blogs</h2>
@@ -127,12 +135,17 @@ const App = () => {
         {user.user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <Switch>
+        <Route path="/users/:id">
+          <User user={requestedUser} />
+        </Route>
         <Route path="/users">
           <h2>Users</h2>
           <b>blogs created</b>
           {Object.keys(user.users).map((key, i) => (
             <div key={i}>
-              <div key={i} style={{ width: '150px', float: 'left' }}>{user.users[key].name}</div>
+              <Link to={'/users/' + user.users[key].id}>
+                <div key={i} style={{ width: '150px', float: 'left' }}>{user.users[key].name}</div>
+              </Link>
               <div>{user.users[key].blogs.length}</div>
             </div>
           ))}

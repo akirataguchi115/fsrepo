@@ -1,4 +1,4 @@
-const blogsReducer = (state = { user: {}, username: '', password: '', users: {} }, action) => {
+const blogsReducer = (state = { user: {}, username: '', password: '', users: [] }, action) => {
   switch (action.type) {
   case 'SET_USER':
     return { ...state, user: action.data }
