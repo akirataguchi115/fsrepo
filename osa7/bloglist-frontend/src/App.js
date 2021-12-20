@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import Blog from './components/Blog'
+// import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
+import Blog from './components/Blog'
 
 import loginService from './services/login'
 import userService from './services/users'
@@ -120,10 +121,23 @@ const App = () => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
-  const match = useRouteMatch('/users/:id')
+  let match = useRouteMatch('/users/:id')
   const requestedUser = match
     ? user.users.find(user => user.id === match.params.id)
     : null
+
+  match = useRouteMatch('/blogs/:id')
+  const requestedBlog = match
+    ? blogs.find(blog => blog.id === match.params.id)
+    : null
+
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
 
   return (
     <div>
@@ -150,19 +164,22 @@ const App = () => {
             </div>
           ))}
         </Route>
+        <Route path="/blogs/:id">
+          <Blog
+            blog={requestedBlog}
+            handleLike={handleLike}
+            handleRemove={handleRemove}
+          />
+        </Route>
         <Route path="/">
           <Togglable buttonLabel='create new blog' ref={blogFormRef}>
             <NewBlog createBlog={addBlog} />
           </Togglable>
 
           {blogs.sort(byLikes).map(blog =>
-            <Blog
-              key={blog.id}
-              blog={blog}
-              handleLike={handleLike}
-              handleRemove={handleRemove}
-              own={user.username === blog.user.username}
-            />
+            <Link key={blog.id} to={'/blogs/' + blog.id}>
+              <div style={blogStyle}>{blog.title}</div>
+            </Link>
           )}
         </Route>
       </Switch>
