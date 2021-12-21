@@ -139,8 +139,17 @@ const App = () => {
     marginBottom: 5
   }
 
+  const padding = {
+    padding: 5
+  }
+
   return (
     <div>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        {user.user.name} logged in <button onClick={handleLogout}>logout</button>
+      </div>
       <h2>blogs</h2>
 
       <Notification />
