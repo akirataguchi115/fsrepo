@@ -2,11 +2,11 @@ const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 
 router.get('/', async (request, response) => {
   const blogs = await Blog
-    .find({}).populate('user', { username: 1, name: 1 })
-
+    .find({}).populate(['user', 'comments'])
   response.json(blogs)
 })
 
@@ -62,6 +62,21 @@ router.post('/', async (request, response) => {
   await user.save()
 
   response.status(201).json(savedBlog)
+})
+
+router.post('/:id/comments', async (request, response) => {
+  const comment = new Comment(request.body)
+  if (!comment.content) {
+    return response.status(400).send({ error: 'content missing' })
+  }
+  await comment.save()
+
+  const blog = await Blog.findById(request.params.id)
+  blog.comments = blog.comments.push(comment)
+
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+
+  response.json(updatedBlog.toJSON())
 })
 
 module.exports = router

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-// import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
@@ -153,10 +152,6 @@ const App = () => {
       <h2>blogs</h2>
 
       <Notification />
-
-      <p>
-        {user.user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
       <Switch>
         <Route path="/users/:id">
           <User user={requestedUser} />
