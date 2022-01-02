@@ -21,6 +21,8 @@ import {
 } from 'react-router-dom'
 import User from './components/User'
 import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min'
+import { Form, Button } from 'react-bootstrap'
+
 const App = () => {
   const blogs = useSelector(({ blogs }) => blogs)
   const user = useSelector(({ user }) => user)
@@ -102,23 +104,27 @@ const App = () => {
         <Notification />
 
         <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              id='username'
-              value={user.username}
-              onChange={({ target }) => dispatch(setUsername(target.value))}
-            />
-          </div>
-          <div>
-            password
-            <input
-              id='password'
-              value={user.password}
-              onChange={({ target }) => dispatch(setPassword(target.value))}
-            />
-          </div>
-          <button id='login'>login</button>
+          <Form.Group>
+            <div>
+              username
+              <Form.Control
+                type="text"
+                id='username'
+                value={user.username}
+                onChange={({ target }) => dispatch(setUsername(target.value))}
+              />
+            </div>
+            <div>
+              password
+              <Form.Control
+                type="password"
+                id='password'
+                value={user.password}
+                onChange={({ target }) => dispatch(setPassword(target.value))}
+              />
+            </div>
+            <Button variant="primary" type="submit" id='login'>login</Button>
+          </Form.Group>
         </form>
       </div>
     )
@@ -149,7 +155,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <div>
         <Link style={padding} to="/">blogs</Link>
         <Link style={padding} to="/users">users</Link>
