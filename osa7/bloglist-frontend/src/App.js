@@ -7,6 +7,7 @@ import Blog from './components/Blog'
 import loginService from './services/login'
 import userService from './services/users'
 import storage from './utils/storage'
+import blogService from './services/blogs'
 
 import { notifyWith } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -86,6 +87,11 @@ const App = () => {
   const handleLogout = () => {
     dispatch(setUser(null))
     storage.logoutUser()
+  }
+
+  const handleNewComment = async (id, content) => {
+    console.log(content)
+    await blogService.addComment(id, { content })
   }
 
   if (!user.user) {
@@ -173,6 +179,7 @@ const App = () => {
             blog={requestedBlog}
             handleLike={handleLike}
             handleRemove={handleRemove}
+            handleNewComment={handleNewComment}
           />
         </Route>
         <Route path="/">
