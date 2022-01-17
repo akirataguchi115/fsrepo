@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
-// import { gql, useLazyQuery } from '@apollo/client'
+import React from 'react'
+import { useQuery } from '@apollo/client'
+import { ALL_AUTHORS } from '../queries'
 
 const Authors = (props) => {
-  const [authors, setAuthors] = useState(props.authors)
+  const authors = useQuery(ALL_AUTHORS)
+  if (authors.loading) return <div>loading...</div>
 
-  if (!authors) {
+  if (!props.show) {
     return null
   }
 
@@ -22,7 +24,7 @@ const Authors = (props) => {
               books
             </th>
           </tr>
-          {authors.map(a =>
+          {authors.data.allAuthors.map(a =>
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
