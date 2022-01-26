@@ -7,15 +7,15 @@ const Authors = (props) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
-  const [ changeBorn, result] = useMutation(EDIT_AUTHOR, {
+  const [changeBorn, result] = useMutation(EDIT_AUTHOR, {
     onError: (error) => {
       console.log(JSON.stringify(error.networkError.result.errors[0].message))
     },
-    refetchQueries: [ { query: ALL_AUTHORS } ]
+    refetchQueries: [{ query: ALL_AUTHORS }]
   })
 
   useEffect(() => {
-    if ( result.data && !result.data.editAuthor) {
+    if (result.data && !result.data.editAuthor) {
       console.log('name not found')
     }
   }, [result.data])
@@ -29,7 +29,7 @@ const Authors = (props) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    changeBorn({ variables: { name, setBornTo: born }})
+    changeBorn({ variables: { name, setBornTo: born } })
 
     setName('')
     setBorn('')
@@ -61,16 +61,17 @@ const Authors = (props) => {
       <h3>Set birthyear</h3>
       <form onSubmit={submit}>
         <div>
-          name
-          <input
-          value={name}
-          onChange={({ target }) => setName(target.value)}/>
+          <select value={name} onChange={({ target }) => setName(target.value)}>
+            {authors.data.allAuthors.map(a =>
+              <option key={a.name} value={a.name}>{a.name}</option>
+            )}
+          </select>
         </div>
         <div>
           born
           <input
-          value={born}
-          onChange={({ target }) => setBorn(parseInt(target.value))}/>
+            value={born}
+            onChange={({ target }) => setBorn(parseInt(target.value))} />
         </div>
         <button type='submit'>update author</button>
       </form>
