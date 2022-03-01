@@ -65,12 +65,20 @@ const resolvers = {
     allAuthors: () => Author.find({})
   },
   Author: {
-    bookCount: (root) => null
+    name: async (root) => {
+      const author = await Author.findById(root)
+      return author.name
+    },
+    bookCount: async (root) => {
+      const books = await Book.find({}).populate('author')
+      const author = await Author.findById(root)
+      return books.filter(book => book.author.name === author.name).length
+    }
   },
   Mutation: {
     addBook: async (root, args) => {
       let author = Author.findOne({ name: args.author })
-      if (author=[]) author = new Author({ name: args.author })
+      if (author = []) author = new Author({ name: args.author })
       try {
         await author.save()
       } catch (error) {
@@ -78,8 +86,13 @@ const resolvers = {
           invalidArgs: args,
         })
       }
-      const book = new Book({ ...args, author: author})
+      const book = new Book({ ...args, author: author })
       return book.save()
+    },
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+      author.born = args.setBornTo
+      return author.save()
     },
   }
 }
