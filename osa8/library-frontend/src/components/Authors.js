@@ -9,7 +9,7 @@ const Authors = (props) => {
 
   const [changeBorn, result] = useMutation(EDIT_AUTHOR, {
     onError: (error) => {
-      console.log(JSON.stringify(error.networkError.result.errors[0].message))
+      console.log(error.graphQLErrors[0].message)
     },
     refetchQueries: [{ query: ALL_AUTHORS }]
   })
@@ -61,10 +61,11 @@ const Authors = (props) => {
       <h3>Set birthyear</h3>
       <form onSubmit={submit}>
         <div>
-          <select value={name} onChange={({ target }) => setName(target.value)}>
+          <select defaultValue=" -- select an option -- " onChange={({ target }) => setName(target.value)}>
             {authors.data.allAuthors.map(a =>
               <option key={a.name} value={a.name}>{a.name}</option>
             )}
+            <option value=" -- select an option -- "> -- select an option -- </option>
           </select>
         </div>
         <div>
