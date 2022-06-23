@@ -51,3 +51,11 @@ export const LOGIN = gql`
     }
   }
 `
+export const LOGGEDIN_USER = gql`
+  query {
+    me {
+      username
+      favorite
+    }
+  }
+`

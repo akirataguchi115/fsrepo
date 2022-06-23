@@ -35,7 +35,7 @@ const typeDefs = gql`
 
   type User {
     username: String!
-    favoriteGenre: String!
+    favorite: String!
     id: ID!
   }
 
@@ -64,7 +64,7 @@ const typeDefs = gql`
     ): Author
     createUser(
       username: String!
-      favoriteGenre: String!
+      favorite: String!
     ): User
     login(
       username: String!
@@ -134,7 +134,7 @@ const resolvers = {
       return author
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({ username: args.username, favorite: args.favorite })
 
       return user.save()
         .catch(error => {
