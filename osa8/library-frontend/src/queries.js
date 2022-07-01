@@ -59,3 +59,9 @@ export const LOGGEDIN_USER = gql`
     }
   }
 `
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+        title
+    }
+  }`
