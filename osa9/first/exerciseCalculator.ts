@@ -22,9 +22,8 @@ const calculateExercises = (args: Array<number>, target: number): ExerciseResult
       default: return "Big gains coming next period!"
     }
   }
-
   return {
-    periodLength: args.length,
+    periodLength: args.length,  
     trainingDays: args.filter(a => a !== 0).length,
     success: target < args.reduce((a,b) => a + b, 0) / args.length,
     rating: rating(),
@@ -34,4 +33,14 @@ const calculateExercises = (args: Array<number>, target: number): ExerciseResult
   }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+let args: number[] = []
+if(!process.argv[2]) {
+  console.log('No target defined')
+} else {
+  process.argv.forEach((val, index) => {
+    if (index != 0 && index != 1 && index != 2) {
+      args.push(Number(val))
+    }
+  })
+  console.log(calculateExercises(args, Number(process.argv[2])))
+}
