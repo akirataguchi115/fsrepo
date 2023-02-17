@@ -5,6 +5,9 @@ const calculateBmi = (height: number, weight: number) : String => {
     case result >= 18.5 && result <= 24.9: return "Normal (healthy weight)"
     case result > 24.9 :return "Overweight"
   }
+  return "Something went wrong"
 }
 
 console.log(calculateBmi(+process.argv[2], +process.argv[3]))
+
+export { calculateBmi };
