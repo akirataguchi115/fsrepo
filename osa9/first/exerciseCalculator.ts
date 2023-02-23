@@ -17,9 +17,9 @@ const calculateExercises = (args: Array<number>, target: number): ExerciseResult
   };
   const description = () => {
     switch (rating()) {
-      case 3: return 'Winner!';
+      case 3: return 'winner!';
       case 2: return 'not too bad but could be better';
-      default: return "Big gains coming next period!";
+      default: return "bad";
     }
   };
   return {
@@ -44,3 +44,5 @@ if(!process.argv[2]) {
   });
   console.log(calculateExercises(args, Number(process.argv[2])));
 }
+
+export { calculateExercises };
